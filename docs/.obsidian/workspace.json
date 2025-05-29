@@ -1,0 +1,184 @@
+{
+  "main": {
+    "id": "d4bf81eff1d80e61",
+    "type": "split",
+    "children": [
+      {
+        "id": "8a32f96a1a84d746",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2cf2500d46e5fcdf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Archticure.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Archticure"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "0c9190007e17212b",
+    "type": "split",
+    "children": [
+      {
+        "id": "e8e6c4a6373784bd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "81507dfb7060c0d1",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "6d94e6cda7d0fb27",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "2380ea5528d9d1f4",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "784d148ad1da7bfc",
+    "type": "split",
+    "children": [
+      {
+        "id": "31d5e0cf02723fa6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e310bbcb8a970487",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Archticure.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Archticure"
+            }
+          },
+          {
+            "id": "faf13f340d7fc8e6",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "First meting sequence.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from First meting sequence"
+            }
+          },
+          {
+            "id": "2a06917a7ca75057",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "f5adb8e4c00bbee6",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Archticure.md",
+                "followCursor": true,
+                "showSearch": true,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Archticure"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "2cf2500d46e5fcdf",
+  "lastOpenFiles": [
+    "architecture.md",
+    "Archticure.md",
+    "Untitled.md",
+    "Proposal.md",
+    "First meting sequence.md",
+    "Untitled 1.md",
+    "Welcome.md",
+    "Chapter 2.md",
+    "Chapter 1.md",
+    "Chapter 3.md"
+  ]
+}
