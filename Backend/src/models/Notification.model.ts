@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-export interface Notification {
+export interface INotification {
     _id: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
     title: string;
@@ -12,7 +12,7 @@ export interface Notification {
     createdAt: Date;
 }
 
-const NotificationSchema = new mongoose.Schema<Notification>({
+const NotificationSchema = new mongoose.Schema<INotification>({
     userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
     title: { type: String, required: true },
     message: { type: String, required: true },
@@ -22,6 +22,5 @@ const NotificationSchema = new mongoose.Schema<Notification>({
 }, {
     timestamps: true
 });
-
-const NotificationModel = mongoose.model<Notification>("Notification", NotificationSchema);
+const NotificationModel = mongoose.model<INotification>("Notification", NotificationSchema);
 export default NotificationModel;

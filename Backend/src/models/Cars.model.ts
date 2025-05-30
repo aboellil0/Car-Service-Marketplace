@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface Cars {
+export interface ICars {
     _id: mongoose.Types.ObjectId;
     brand: string;
     brandEnglish: string;
@@ -9,7 +9,7 @@ export interface Cars {
     year: number;
 }
 
-const CarSchema = new mongoose.Schema<Cars>({
+const CarSchema = new mongoose.Schema<ICars>({
     brand: { type: String, required: true },
     brandEnglish: { type: String, required: true },
     country: { type: String, default: "" },
@@ -20,5 +20,5 @@ const CarSchema = new mongoose.Schema<Cars>({
 });
 
 
-const Car = mongoose.model<Cars>("Cars", CarSchema);
+const Cars = mongoose.model<ICars>("Cars", CarSchema);
 export default Cars;

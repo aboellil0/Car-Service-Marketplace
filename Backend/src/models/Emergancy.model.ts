@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface Emergency {
+export interface IEmergency {
     _id?: mongoose.Types.ObjectId;
     workspaces: mongoose.Types.ObjectId[]; // Array of workspace IDs
     emergencyType: string; // e.g., "Fire", "Medical", "Security"
@@ -12,7 +12,7 @@ export interface Emergency {
 }
 
 
-const EmergencySchema = new mongoose.Schema<Emergency>({
+const EmergencySchema = new mongoose.Schema<IEmergency>({
     workspaces: [{ type: mongoose.Schema.Types.ObjectId, required: true, ref: "Workspace" }],
     emergencyType: { type: String, required: true },
     description: { type: String, default: "" },
@@ -23,3 +23,6 @@ const EmergencySchema = new mongoose.Schema<Emergency>({
 }, {
     timestamps: true
 });
+
+const EmergencyModel = mongoose.model<IEmergency>("Emergency", EmergencySchema);
+export default EmergencyModel;

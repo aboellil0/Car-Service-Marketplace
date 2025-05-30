@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface Service {
+export interface IService {
     _id?: mongoose.Types.ObjectId;
     workspaceId: mongoose.Types.ObjectId;
     name: string;
@@ -12,7 +12,7 @@ export interface Service {
     createdAt: Date;
 }
 
-const ServiceSchema = new mongoose.Schema<Service>({
+const ServiceSchema = new mongoose.Schema<IService>({
     workspaceId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Workspace" },
     name: { type: String, required: true },
     description: { type: String, required: true },
@@ -24,7 +24,7 @@ const ServiceSchema = new mongoose.Schema<Service>({
     timestamps: true
 });
 
-const ServiceModel = mongoose.model<Service>("Service", ServiceSchema);
+const ServiceModel = mongoose.model<IService>("Service", ServiceSchema);
 export default ServiceModel;
 
 

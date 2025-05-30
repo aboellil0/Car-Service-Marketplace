@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface CarInfo {
+export interface ICarInfo {
     _id: mongoose.Types.ObjectId;
     year: number;
     color: string;
@@ -8,7 +8,7 @@ export interface CarInfo {
     image?:string;
 }
 
-const CarInfoSchema = new mongoose.Schema<CarInfo>({
+const CarInfoSchema = new mongoose.Schema<ICarInfo>({
     year: { type: Number, required: true },
     color: { type: String, required: true },
     plateNumber: { type: String, required: true, unique: true },
@@ -17,5 +17,5 @@ const CarInfoSchema = new mongoose.Schema<CarInfo>({
     timestamps: true
 });
 
-const CarInfo = mongoose.model<CarInfo>("CarInfo", CarInfoSchema);
+const CarInfo = mongoose.model<ICarInfo>("CarInfo", CarInfoSchema);
 export default CarInfo;

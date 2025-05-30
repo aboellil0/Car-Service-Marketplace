@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-export interface User {
+export interface IUser {
     _id: mongoose.Types.ObjectId;
     carId?: mongoose.Types.ObjectId;
     carInfoId?: mongoose.Types.ObjectId;
@@ -24,7 +24,7 @@ export interface User {
 }
 
 
-const UserSchema = new mongoose.Schema<User>({
+const UserSchema = new mongoose.Schema<IUser>({
     carId: { type: mongoose.Types.ObjectId, ref: "Cars" },
     carInfoId: { type: mongoose.Types.ObjectId, ref: "CarInfo" },
     email: { type: String, required: true, unique: true },
@@ -67,5 +67,5 @@ UserSchema.methods.comparePassword = async function (candidatePassword: string):
 }
 
 
-const UserModel = mongoose.model<User>("User", UserSchema);
+const UserModel = mongoose.model<IUser>("User", UserSchema);
 export default UserModel;

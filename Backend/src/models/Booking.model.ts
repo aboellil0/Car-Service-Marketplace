@@ -1,7 +1,7 @@
 import { Mongoose } from "mongoose";
 import mongoose from "mongoose";
 
-export interface Booking {
+export interface IBooking {
     _id: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
     workshopId: mongoose.Types.ObjectId;
@@ -16,7 +16,7 @@ export interface Booking {
     updatedAt: Date;
 }
 
-const BookingSchema = new mongoose.Schema<Booking>({
+const BookingSchema = new mongoose.Schema<IBooking>({
     userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
     workshopId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Workshop" },
     serviceId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Service" },
@@ -30,5 +30,5 @@ const BookingSchema = new mongoose.Schema<Booking>({
     timestamps:true
 });
 
-const BookingModel = mongoose.model<Booking>("Booking", BookingSchema);
+const BookingModel = mongoose.model<IBooking>("Booking", BookingSchema);
 export default BookingModel;

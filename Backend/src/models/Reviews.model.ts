@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface Reviews {
+export interface IReviews {
     _id?: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
     workspaceId: mongoose.Types.ObjectId;
@@ -11,7 +11,7 @@ export interface Reviews {
 }
 
 
-const ReviewsSchema = new mongoose.Schema<Reviews>({
+const ReviewsSchema = new mongoose.Schema<IReviews>({
     userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
     workspaceId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Workspace" },
     bookingId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Booking" },
@@ -21,5 +21,5 @@ const ReviewsSchema = new mongoose.Schema<Reviews>({
     timestamps: true
 });
 
-const ReviewsModel = mongoose.model<Reviews>("Reviews", ReviewsSchema);
+const ReviewsModel = mongoose.model<IReviews>("Reviews", ReviewsSchema);
 export default ReviewsModel;

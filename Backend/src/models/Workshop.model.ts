@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { User } from "./User.model";
-export interface Workshop {
+import User,{ IUser } from "./User.model";
+export interface IWorkshop {
 
     id: mongoose.Types.ObjectId;
     ownerId: mongoose.Types.ObjectId;
@@ -27,7 +27,7 @@ export interface Workshop {
     updatedAt: Date;
 }
 
-const WorkshopSchema = new mongoose.Schema<Workshop>({
+const WorkshopSchema = new mongoose.Schema<IWorkshop>({
     ownerId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
     BusinessName: { type: String, required: true },
     discription: { type: String, required: true },
@@ -53,5 +53,5 @@ const WorkshopSchema = new mongoose.Schema<Workshop>({
 });
 
 
-const WorkshopModel = mongoose.model<Workshop>("Workshop", WorkshopSchema);
+const WorkshopModel = mongoose.model<IWorkshop>("Workshop", WorkshopSchema);
 export default WorkshopModel;
