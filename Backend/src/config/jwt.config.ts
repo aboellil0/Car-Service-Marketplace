@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models/User.model';
+import User,{ IUser } from '../models/User.model';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 
@@ -16,7 +16,7 @@ interface TokenPayload {
     role?: string;
 }
 
-export const generateAccessToken = (user: User): string => {
+export const generateAccessToken = (user: IUser): string => {
     const payload: TokenPayload = {
         userId: user._id.toString(),
         email: user.email,
@@ -30,7 +30,7 @@ export const generateAccessToken = (user: User): string => {
 }
 
 
-export const generateRefreshToken = (user: User): string => {
+export const generateRefreshToken = (user: IUser): string => {
     const payload: TokenPayload = {
         userId: user._id.toString(),
         email: user.email,
