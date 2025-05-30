@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 
 export interface User {
     _id: mongoose.Types.ObjectId;
+    carId?: mongoose.Types.ObjectId;
+    carInfoId?: mongoose.Types.ObjectId;
     email: string;
     password: string;
     name: string;
@@ -23,6 +25,8 @@ export interface User {
 
 
 const UserSchema = new mongoose.Schema<User>({
+    carId: { type: mongoose.Types.ObjectId, ref: "Cars" },
+    carInfoId: { type: mongoose.Types.ObjectId, ref: "CarInfo" },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
