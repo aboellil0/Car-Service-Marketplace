@@ -19,6 +19,7 @@ export interface IUser {
     avatar?: string;
     image?: string;
     isVerfied: boolean;
+    isComleted: boolean;
     createdAt: Date;
     updatedAt: Date;
     emailVerificationToken?: string;
@@ -45,6 +46,7 @@ const UserSchema = new mongoose.Schema<IUser>({
     avatar: { type: String, default: "" },
     image: { type: String, default: "" },
     isVerfied: { type: Boolean, default: false },
+    isComleted: { type: Boolean, default: false },  
     emailVerificationToken: { type: String, default: "" },
     emailVerificationExpires: { type: Date, default: null },
     phoneVerificationCode: { type: String, default: "" },

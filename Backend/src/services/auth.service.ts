@@ -36,17 +36,18 @@ interface Workshop_OwnerRegisterDto extends RegisterDto {
         mapLink?: string;
     };
 }
-
+    
 export interface IAuthService {
-    registerCustomer(userData: CustomerRegisterDto): Promise<IUser>;
-    registerWorkshopOwner(userData: Workshop_OwnerRegisterDto): Promise<IUser>;
-    loginUser(email: string, password: string): Promise<{ user: IUser; accessToken: string; refreshToken: string }>;
-    logoutUser(userId: string): Promise<void>;
-    refreshToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }>;
-    verifyEmail(token: string): Promise<IUser>;
-    requestPasswordReset(email: string): Promise<void>;
-    forgotPassword(token: string): Promise<IUser>;
-    resetPassword(token: string, newPassword: string): Promise<IUser>;
-    loginWithGoogle(token: string): Promise<{ user: IUser; accessToken: string; refreshToken: string }>;
+    registerCustomer(userData: CustomerRegisterDto): Promise<AuthResponse>;
+    registerWorkshopOwner(userData: Workshop_OwnerRegisterDto): Promise<AuthResponse>;
+    loginWithUsername(username: string, password: string): Promise<AuthResponse>;
+    loginWithEmail(email: string, password: string): Promise<AuthResponse>;
+    logoutUser(userId: string): Promise<AuthResponse>;
+    refreshToken(refreshToken: string): Promise<AuthResponse>;
+    requestEmailVerification(userId: string): Promise<AuthResponse>;
+    verifyEmail(token: string): Promise<AuthResponse>;
+    forgetPassword(userId: string): Promise<AuthResponse>;
+    resetPassword(token: string, newPassword: string): Promise<AuthResponse>;
+    loginWithGoogle(token: string): Promise<AuthResponse>;
 }
 
