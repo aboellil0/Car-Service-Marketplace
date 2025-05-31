@@ -5,16 +5,20 @@ export interface IUser {
     _id: mongoose.Types.ObjectId;
     carId?: mongoose.Types.ObjectId;
     carInfoId?: mongoose.Types.ObjectId;
-    email: string;
+    username: string;
+    email?: string;
     password: string;
     name: string;
     role: "admin" | "user" | "WorkshropOwner" | "technican" ;
     phone: string;
-    address: string;
-    avatar: string;
-    image: string;
+    location: {
+        address?: string;
+        city: string;
+        state?: string;
+    };
+    avatar?: string;
+    image?: string;
     isVerfied: boolean;
-    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
     emailVerificationToken?: string;
@@ -27,16 +31,20 @@ export interface IUser {
 const UserSchema = new mongoose.Schema<IUser>({
     carId: { type: mongoose.Types.ObjectId, ref: "Cars" },
     carInfoId: { type: mongoose.Types.ObjectId, ref: "CarInfo" },
-    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
+    email: { type: String, unique: true,default: "" },
     password: { type: String, required: true },
     name: { type: String, required: true },
-    role: { type: String, enum: ["admin", "user", "WorkshropOwner", "technican"], default: "user" },
-    phone: { type: String, required: true },
-    address: { type: String, required: true },
+    role: { type: String, enum: ["admin", "user", "WorkshropOwner", "technican"]},
+    phone: { type: String, required: true, unique: true },
+    location: {
+        address: { type: String, default: "" },
+        city: { type: String, required: true },
+        state: { type: String, default: "" }
+    },
     avatar: { type: String, default: "" },
     image: { type: String, default: "" },
     isVerfied: { type: Boolean, default: false },
-    isActive: { type: Boolean, default: true },
     emailVerificationToken: { type: String, default: "" },
     emailVerificationExpires: { type: Date, default: null },
     phoneVerificationCode: { type: String, default: "" },
