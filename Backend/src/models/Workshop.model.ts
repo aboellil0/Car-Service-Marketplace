@@ -23,6 +23,7 @@ export interface IWorkshop {
         closeTime: string;
     }[];
     isverified: boolean;
+    isComleted: boolean;
     phone: string[];
     hasEmergencyService: boolean;
     reviews: mongoose.Types.ObjectId[]; 
@@ -50,6 +51,7 @@ const WorkshopSchema = new mongoose.Schema<IWorkshop>({
         closeTime:{type:String,default:"" }
     }],
     isverified: { type: Boolean, default: false },
+    isComleted: { type: Boolean, default: false },
     phone:[{type:String}],
     hasEmergencyService:{type:Boolean,default:false},
     reviews:[{type:mongoose.Types.ObjectId,ref:"Review"}]

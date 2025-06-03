@@ -711,6 +711,8 @@ graph TB
 ```
 ---
 
+## User Register and Login Archticure 
+
 ```mermaid
 flowchart TD
     Start[User Wants to Register] --> ChooseRole{Choose Role}
@@ -718,35 +720,35 @@ flowchart TD
     ChooseRole -->|Customer| CustomerBasic[Customer Basic Registration]
     ChooseRole -->|Workshop Owner| WorkshopBasic[Workshop Basic Registration]
     
-    subgraph "Customer Basic Registration"
-        CustomerBasic --> CustomerForm[Fill Basic Form:<br/>• Email<br/>• Password<br/>• Name<br/>• Phone<br/>• Accept Terms]
-        CustomerForm --> CustomerSuccess[✅ Registration Success<br/>Profile: 40% Complete]
+    subgraph Customer["Customer Basic Registration"]
+        CustomerBasic --> CustomerForm["Fill Basic Form:<br/>• Email<br/>• Password<br/>• Name<br/>• Phone<br/>• Accept Terms"]
+        CustomerForm --> CustomerSuccess["✅ Registration Success<br/>Profile: 40% Complete"]
     end
     
-    subgraph "Workshop Basic Registration"
-        WorkshopBasic --> WorkshopForm[Fill Basic Form:<br/>• Email<br/>• Password<br/>• Business Name<br/>• Phone<br/>• City & Governorate<br/>• Emergency Service (Yes/No)]
-        WorkshopForm --> WorkshopSuccess[✅ Registration Success<br/>Profile: 30% Complete]
+    subgraph Workshop["Workshop Basic Registration"]
+        WorkshopBasic --> WorkshopForm["Fill Basic Form:<br/>• Email<br/>• Password<br/>• Business Name<br/>• Phone<br/>• City & Governorate<br/>• Emergency Service (Yes/No)"]
+        WorkshopForm --> WorkshopSuccess["✅ Registration Success<br/>Profile: 30% Complete"]
     end
     
     CustomerSuccess --> CustomerDashboard[Customer Dashboard]
     WorkshopSuccess --> WorkshopDashboard[Workshop Dashboard]
     
-    subgraph "Customer Progressive Access"
+    subgraph CustomerFlow["Customer Progressive Access"]
         CustomerDashboard --> CustomerAction{User Action}
         
-        CustomerAction -->|Browse Workshops| AllowBrowse[✅ Allowed<br/>Basic Profile OK]
-        CustomerAction -->|Emergency Service| AllowEmergency[✅ Allowed<br/>Basic Profile OK]
+        CustomerAction -->|Browse Workshops| AllowBrowse["✅ Allowed<br/>Basic Profile OK"]
+        CustomerAction -->|Emergency Service| AllowEmergency["✅ Allowed<br/>Basic Profile OK"]
         CustomerAction -->|Book Regular Service| CheckCustomerProfile{Profile Complete?}
         CustomerAction -->|Leave Review| CheckCustomerProfile
         
-        CheckCustomerProfile -->|No| CustomerPrompt[❌ Please Complete Profile<br/>Required:<br/>• Full Address<br/>• National ID<br/>• Verification]
-        CheckCustomerProfile -->|Yes| AllowBooking[✅ Allowed<br/>Full Access]
+        CheckCustomerProfile -->|No| CustomerPrompt["❌ Please Complete Profile<br/>Required:<br/>• Full Address<br/>• National ID<br/>• Verification"]
+        CheckCustomerProfile -->|Yes| AllowBooking["✅ Allowed<br/>Full Access"]
         
         CustomerPrompt --> CustomerComplete[Complete Profile Form]
-        CustomerComplete --> CustomerFullAccess[🎉 Full Access Unlocked<br/>Profile: 100% Complete]
+        CustomerComplete --> CustomerFullAccess["🎉 Full Access Unlocked<br/>Profile: 100% Complete"]
     end
     
-    subgraph "Workshop Progressive Access"
+    subgraph WorkshopFlow["Workshop Progressive Access"]
         WorkshopDashboard --> WorkshopAction{Workshop Action}
         
         WorkshopAction -->|View Requests| CheckWorkshopLevel{Profile Level?}
@@ -754,58 +756,59 @@ flowchart TD
         WorkshopAction -->|Accept Bookings| CheckFullWorkshop{Complete Profile?}
         WorkshopAction -->|Manage Services| CheckServiceAccess{Service Management Ready?}
         
-        CheckWorkshopLevel -->|Basic| LimitedView[⚠️ Limited View<br/>Only Emergency Requests]
-        CheckWorkshopLevel -->|Intermediate| ExpandedView[📋 Expanded View<br/>Most Requests Visible]
-        CheckWorkshopLevel -->|Complete| FullView[✅ Full Access<br/>All Features Available]
+        CheckWorkshopLevel -->|Basic| LimitedView["⚠️ Limited View<br/>Only Emergency Requests"]
+        CheckWorkshopLevel -->|Intermediate| ExpandedView["📋 Expanded View<br/>Most Requests Visible"]
+        CheckWorkshopLevel -->|Complete| FullView["✅ Full Access<br/>All Features Available"]
         
-        CheckEmergencyAccess -->|Yes + Basic| AllowEmergencyAccept[✅ Can Accept Emergency<br/>Immediate Service OK]
-        CheckEmergencyAccess -->|No| NoEmergency[❌ Emergency Service Disabled]
+        CheckEmergencyAccess -->|Yes + Basic| AllowEmergencyAccept["✅ Can Accept Emergency<br/>Immediate Service OK"]
+        CheckEmergencyAccess -->|No| NoEmergency["❌ Emergency Service Disabled"]
         
-        CheckFullWorkshop -->|No| WorkshopPrompt[❌ Complete Profile Required<br/>Missing:<br/>• Business License<br/>• Full Address<br/>• Service Catalog<br/>• Working Hours<br/>• Business Documents<br/>• Admin Approval]
-        CheckFullWorkshop -->|Yes| AllowFullWorkshop[✅ Full Workshop Access]
+        CheckFullWorkshop -->|No| WorkshopPrompt["❌ Complete Profile Required<br/>Missing:<br/>• Business License<br/>• Full Address<br/>• Service Catalog<br/>• Working Hours<br/>• Business Documents<br/>• Admin Approval"]
+        CheckFullWorkshop -->|Yes| AllowFullWorkshop["✅ Full Workshop Access"]
         
-        CheckServiceAccess -->|Basic| BasicServices[⚠️ Limited Services<br/>Emergency Only]
-        CheckServiceAccess -->|Complete| AllServices[✅ All Services Available]
+        CheckServiceAccess -->|Basic| BasicServices["⚠️ Limited Services<br/>Emergency Only"]
+        CheckServiceAccess -->|Complete| AllServices["✅ All Services Available"]
         
         WorkshopPrompt --> WorkshopSteps{Complete Which Step?}
         
-        WorkshopSteps -->|Step 1| AddLicense[Add Business License<br/>Profile: 50%]
-        WorkshopSteps -->|Step 2| AddLocation[Add Detailed Location<br/>Profile: 60%]
-        WorkshopSteps -->|Step 3| AddServices[Create Service Catalog<br/>Profile: 75%]
-        WorkshopSteps -->|Step 4| AddHours[Set Working Hours<br/>Profile: 85%]
-        WorkshopSteps -->|Step 5| UploadDocs[Upload Documents<br/>Profile: 95%]
+        WorkshopSteps -->|Step 1| AddLicense["Add Business License<br/>Profile: 50%"]
+        WorkshopSteps -->|Step 2| AddLocation["Add Detailed Location<br/>Profile: 60%"]
+        WorkshopSteps -->|Step 3| AddServices["Create Service Catalog<br/>Profile: 75%"]
+        WorkshopSteps -->|Step 4| AddHours["Set Working Hours<br/>Profile: 85%"]
+        WorkshopSteps -->|Step 5| UploadDocs["Upload Documents<br/>Profile: 95%"]
         
-        AddLicense --> IntermediateAccess[📈 Intermediate Access<br/>Can View More Requests]
+        AddLicense --> IntermediateAccess["📈 Intermediate Access<br/>Can View More Requests"]
         AddLocation --> IntermediateAccess
-        AddServices --> AdvancedAccess[🔧 Advanced Access<br/>Can Manage Services]
+        AddServices --> AdvancedAccess["🔧 Advanced Access<br/>Can Manage Services"]
         AddHours --> AdvancedAccess
-        UploadDocs --> SubmitApproval[Submit for Admin Approval<br/>Profile: 100%]
+        UploadDocs --> SubmitApproval["Submit for Admin Approval<br/>Profile: 100%"]
         
-        SubmitApproval --> PendingApproval[⏳ Pending Admin Approval]
-        PendingApproval -->|Approved| FullWorkshopAccess[🎉 Full Workshop Access<br/>All Features Unlocked]
-        PendingApproval -->|Rejected| FixIssues[❌ Fix Issues & Resubmit]
+        SubmitApproval --> PendingApproval["⏳ Pending Admin Approval"]
+        PendingApproval -->|Approved| FullWorkshopAccess["🎉 Full Workshop Access<br/>All Features Unlocked"]
+        PendingApproval -->|Rejected| FixIssues["❌ Fix Issues & Resubmit"]
     end
     
-    subgraph "Access Level Matrix"
-        AccessMatrix[📊 Access Levels]
+    subgraph AccessLevels["Access Level Matrix"]
+        BasicCustomer["👤 Basic Customer<br/>• Browse workshops<br/>• Emergency service<br/>• View profile"]
         
-        BasicCustomer[👤 Basic Customer<br/>• Browse workshops<br/>• Emergency service<br/>• View profile]
+        CompleteCustomer["👤 Complete Customer<br/>• All basic features<br/>• Book regular services<br/>• Leave reviews<br/>• Full history<br/>• Priority support"]
         
-        CompleteCustomer[👤 Complete Customer<br/>• All basic features<br/>• Book regular services<br/>• Leave reviews<br/>• Full history<br/>• Priority support]
+        BasicWorkshop["🏪 Basic Workshop<br/>• Emergency requests only<br/>• Limited dashboard<br/>• Basic notifications"]
         
-        BasicWorkshop[🏪 Basic Workshop<br/>• Emergency requests only<br/>• Limited dashboard<br/>• Basic notifications]
+        IntermediateWorkshop["🏪 Intermediate Workshop<br/>• More request visibility<br/>• Service management<br/>• Customer communication<br/>• Basic analytics"]
         
-        IntermediateWorkshop[🏪 Intermediate Workshop<br/>• More request visibility<br/>• Service management<br/>• Customer communication<br/>• Basic analytics]
-        
-        CompleteWorkshop[🏪 Complete Workshop<br/>• All request types<br/>• Full service catalog<br/>• Advanced analytics<br/>• Staff management<br/>• Priority listing<br/>• Marketing tools]
+        CompleteWorkshop["🏪 Complete Workshop<br/>• All request types<br/>• Full service catalog<br/>• Advanced analytics<br/>• Staff management<br/>• Priority listing<br/>• Marketing tools"]
     end
     
-    style CustomerBasic fill:#e8f5e8
-    style WorkshopBasic fill:#e3f2fd
-    style CustomerPrompt fill:#fff3e0
-    style WorkshopPrompt fill:#fff3e0
-    style CustomerFullAccess fill:#c8e6c9
-    style FullWorkshopAccess fill:#c8e6c9
+    classDef customerStyle fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
+    classDef workshopStyle fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    classDef promptStyle fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    classDef successStyle fill:#c8e6c9,stroke:#4caf50,stroke-width:3px
+    
+    class CustomerBasic,CustomerForm,CustomerSuccess customerStyle
+    class WorkshopBasic,WorkshopForm,WorkshopSuccess workshopStyle
+    class CustomerPrompt,WorkshopPrompt promptStyle
+    class CustomerFullAccess,FullWorkshopAccess successStyle
 ```
 
 ---
