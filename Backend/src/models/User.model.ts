@@ -7,6 +7,7 @@ export interface IUser {
     carInfoId?: mongoose.Types.ObjectId;
     username: string;
     email?: string;
+    temporaryEmail?: string;
     password: string;
     name: string;
     role: "admin" | "user" | "WorkshropOwner" | "technican" ;
@@ -26,6 +27,7 @@ export interface IUser {
     emailVerificationExpires?: Date;
     phoneVerificationCode?: string;
     phoneVerificationExpires?: Date;
+    comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 
@@ -34,6 +36,7 @@ const UserSchema = new mongoose.Schema<IUser>({
     carInfoId: { type: mongoose.Types.ObjectId, ref: "CarInfo" },
     username: { type: String, required: true, unique: true },
     email: { type: String, unique: true,default: "" },
+    temporaryEmail: { type: String, default: "" },
     password: { type: String, required: true },
     name: { type: String, required: true },
     role: { type: String, enum: ["admin", "user", "WorkshropOwner", "technican"]},

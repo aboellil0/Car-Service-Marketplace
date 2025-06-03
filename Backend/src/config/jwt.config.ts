@@ -55,3 +55,16 @@ export const gentateVerficationToken = (): string => {
     return crypto.randomUUID();
 }
 
+
+export const revokeRefreshToken = async (userId: string): Promise<void> => {
+    try {
+        await User.updateOne(
+            { _id: userId },
+            { $set: { refreshToken: null } }
+        );
+    } catch (error) {
+        console.error("Error revoking refresh token:", error);
+        throw new Error("Failed to revoke refresh token");
+    }
+}
+
