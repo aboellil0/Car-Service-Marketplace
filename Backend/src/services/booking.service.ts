@@ -28,12 +28,6 @@ export interface createBookingRequest {
     description: string;
 }
 
-// export interface BookingCompletionRequest {
-//     finalPrice: number;
-//     workPerformed: string;
-//     partsUsed?: string[];
-//     recommendations?: string;
-// }
 
 enum BookingStatus {
     PENDING = "pending",

@@ -8,7 +8,6 @@ export interface IBooking {
     serviceId: mongoose.Types.ObjectId;
     vehicleId: mongoose.Types.ObjectId;
     vihicleName_inEmgrancy: string;
-    isEmergancy: string;
     location: string;
     date: Date;
     status: "pending" | "confirmed" |"in_progress"| "cancelled" | "completed";
@@ -21,8 +20,7 @@ const BookingSchema = new mongoose.Schema<IBooking>({
     workshopId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Workshop" },
     serviceId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Service" },
     vehicleId: { type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" },
-    vihicleName_inEmgrancy: { type: String, default: "" },
-    isEmergancy: { type: String, default: "" },
+    vihicleName_inEmgrancy: { type: String, default: "" },  
     location: { type: String, required: true },
     date: { type: Date, required: true },
     status: { type: String, enum: ["pending", "confirmed", "in_progress", "cancelled", "completed"], default:"pending" }
