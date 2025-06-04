@@ -138,38 +138,6 @@ class AuthService implements IAuthService{
         })
     }
 
-    // async addEmail(userId: mongoose.Types.ObjectId): Promise<AuthResponse> {
-    //     return new Promise(async (resolve,reject)=>{
-    //         try{
-    //             const user = await User.findById(userId);
-    //             if (!user) {
-    //                 return reject({ success: false, message: "User not found" });
-    //             }
-    //             const { email } = user;
-    //             if (!email) {
-    //                 return reject({ success: false, message: "Email is required" });
-    //             }
-
-    //             const existingUser = await User.findOne({ email });
-    //             if (existingUser) {
-    //                 return reject({ success: false, message: "Email already exists" });
-    //             }
-                
-    //             user.email = email;
-    //             await user.save();
-
-    //             resolve({
-    //                 success: true,
-    //                 message: "Email added successfully",
-    //                 accessToken: generateAccessToken(user),
-    //                 refreshToken: generateRefreshToken(user)
-    //             });
-    //         } catch (error) {
-    //             reject({ success: false, message: error });
-    //         }
-    //     })
-    // }
-
     async loginWithUsername(username: string, password: string): Promise<AuthResponse> {
         return new Promise(async (resolve, reject) => {
             try {
