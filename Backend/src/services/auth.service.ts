@@ -7,8 +7,18 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { resolve } from "path";
 import { rejects } from "assert";
 import { error } from "console";
+import { getGoogleUser } from "../config/google.config";
 
-
+interface GoogleProfile{
+    id: string;
+    email: string;
+    name: string;
+    picture: string;
+    verified_email: boolean;
+    given_name: string;
+    family_name: string;
+    locale: string;
+}
 
 interface GeneralResponse {
     success: boolean;
@@ -55,7 +65,7 @@ export interface IAuthService {
     saveEmail(userId: mongoose.Types.ObjectId, email: string): Promise<GeneralResponse>;
     forgetPassword(userId: string): Promise<GeneralResponse>;
     resetPassword(token: string, newPassword: string): Promise<GeneralResponse>;
-    loginWithGoogle(token: string): Promise<AuthResponse>;
+    loginWithGoogle(code: string): Promise<AuthResponse>;
 }
 
 
@@ -306,6 +316,110 @@ class AuthService implements IAuthService{
             }
         });
     }
-    
+    async forgetPassword(userId: string): Promise<GeneralResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await User.findById(userId);
+                if (!user) {
+                    return reject({ success: false, message: "User not found" });
+                }
+
+                user.passwordResetToken = gentateVerficationToken();
+                user.passwordResetExpires = new Date(Date.now() + 3600000); 
+                await user.save();
+
+                if (!user.email) {
+                    return reject({ success: false, message: "Email not found for user" });
+                }
+                await sendPasswordResetEmail(user.email, user.passwordResetToken);
+
+                resolve({
+                    success: true,
+                    message: "Password reset email sent successfully"
+                });
+            } catch (error) {
+                reject({ success: false, message: error });
+            }
+        });
+    }
+
+    async resetPassword(token: string, newPassword: string): Promise<GeneralResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await User.findOne({ 
+                    passwordResetToken: token,
+                    passwordResetExpires: { $gt: new Date(Date.now()) } 
+                });
+
+                if (!user) {
+                    return reject({ success: false, message: "Invalid or expired password reset token" });
+                }
+
+                user.password = newPassword; 
+                user.passwordResetToken = undefined;
+                user.passwordResetExpires = undefined;
+                await user.save();
+
+                resolve({
+                    success: true,
+                    message: "Password reset successfully"
+                });
+            } catch (error) {
+                reject({ success: false, message: error });
+            }
+        });
+    }
+
+    async loginWithGoogle(code: string): Promise<AuthResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const googleUser = await getGoogleUser(code) as GoogleProfile;
+                
+                let user = await User.findOne({ googleId: googleUser.id });
+                
+                if (!user) {
+                    // Check if user exists with the same email
+                    user = await User.findOne({ email: googleUser.email });
+                    
+                    if (user) {
+                        // Link Google account to existing user
+                        user.googleId = googleUser.id;
+                        user.isVerfied = true;
+                        await user.save();
+                    } else {
+                        // Create new user
+                        const username = googleUser.email.split('@')[0] + '_' + Math.random().toString(36).substring(2, 5);
+                        user = new User({
+                            username,
+                            email: googleUser.email,
+                            name: googleUser.name,
+                            googleId: googleUser.id,
+                            role: 'user',
+                            isVerfied: true,
+                            avatar: googleUser.picture
+                        });
+                        await user.save();
+                    }
+                }
+
+                const accessToken = generateAccessToken(user);
+                const refreshToken = generateRefreshToken(user);
+
+                resolve({
+                    success: true,
+                    message: "Google login successful",
+                    accessToken,
+                    refreshToken
+                });
+            } catch (error) {
+                reject({ 
+                    success: false, 
+                    message: "Google authentication failed",
+                    accessToken: "",
+                    refreshToken: ""
+                });
+            }
+        });
+    }
 }
 
