@@ -21,7 +21,10 @@ export interface IUser {
     avatar?: string;
     image?: string;
     isVerfied: boolean;
-    isComleted: boolean;
+    isCompleted: boolean;
+    hasCar: boolean;
+    hasCarInfo: boolean;
+    hasFullAddress: boolean;
     createdAt: Date;
     updatedAt: Date;
     emailVerificationToken?: string;
@@ -53,7 +56,15 @@ const UserSchema = new mongoose.Schema<IUser>({
     googleId: { type: String, unique: true, sparse: true },  // Added for Google auth
     image: { type: String, default: "" },
     isVerfied: { type: Boolean, default: false },
-    isComleted: { type: Boolean, default: false },
+    hasCar: { type: Boolean, default: false },
+    hasCarInfo: { type: Boolean, default: false },
+    hasFullAddress: { type: Boolean, default: false },
+    isCompleted: { 
+        type: Boolean, 
+        default: function(this: IUser) {
+            return this.hasCar && this.hasCarInfo && this.hasFullAddress;
+        }
+    },
     emailVerificationToken: { type: String, default: "" },
     emailVerificationExpires: { type: Date, default: null },
     passwordResetToken: { type: String, default: "" },
