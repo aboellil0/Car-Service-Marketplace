@@ -1,5 +1,5 @@
 import { IUser } from "../models/User.model";
-import WorkShop,{ IWorkshop } from "../models/Workshop.model";
+import WorkShop, { IWorkshop } from "../models/Workshop.model";
 
 
 
