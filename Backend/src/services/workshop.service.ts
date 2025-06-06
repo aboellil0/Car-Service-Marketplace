@@ -24,6 +24,7 @@ interface IWorkshopService {
     getAllWorkshops(): Promise<ApiResponse<IWorkshop[]>>;
     getWorkshopById(id: string): Promise<ApiResponse<IWorkshop>>;
     createWorkshop(workshopData: Partial<IWorkshop>, ownerId: string): Promise<ApiResponse<IWorkshop>>; // owner
+    addPhonenumber(workshopData: Partial<IWorkshop>) : Promise<ApiResponse<IWorkshopService>>; // owner
     updateWorkshop(id: string, workshopData: Partial<IWorkshop>): Promise<ApiResponse<IWorkshop>>; //owner
     deleteWorkshop(id: string): Promise<ApiResponse<null>>; // owner
     findNearbyWorkshops(location: { lat: number; lng: number }): Promise<ApiResponse<IWorkshop[]>>;
