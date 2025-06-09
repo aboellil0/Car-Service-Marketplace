@@ -281,7 +281,7 @@ function App() {
               >
                 {isAuthenticated ? (
                   <>
-                    <Search classNam    e="ml-2\" size={24} />
+                    <Search className="ml-2\" size={24} />
                     <span>استعرض الخدمات</span>
                   </>
                 ) : (
