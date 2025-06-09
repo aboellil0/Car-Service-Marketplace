@@ -18,7 +18,7 @@ const NotificationSchema = new mongoose.Schema<INotification>({
     message: { type: String, required: true },
     type: { type: String, enum: ['BOOKING_CREATED', 'BOOKING_ACCEPTED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'EMERGENCY_BROADCAST', 'EMERGENCY_ACCEPTED', 'SYSTEM_ANNOUNCEMENT'] },
     isRead: { type: Boolean, default: false },
-    data: { type: Object, default: {} }
+    data: { type: Object, default: {}}
 }, {
     timestamps: true
 });
