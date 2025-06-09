@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { UserCircle, Lock, Phone, MapPin, ArrowRight, ArrowLeft, Home, Car, Building2, Link, AlertTriangle, Search } from 'lucide-react';
+import EmergencyPage from './components/EmergencyPage';
+import WorkshopEmergencyPage from './components/WorkshopEmergencyPage';
 
 // Define types for our form data
 type FormData = {
@@ -16,7 +18,7 @@ type FormData = {
 };
 
 // Define the steps of our registration process
-type Step = 'home' | 'welcome' | 'username' | 'password' | 'phone' | 'city' | 'business-details' | 'success';
+type Step = 'home' | 'welcome' | 'username' | 'password' | 'phone' | 'city' | 'business-details' | 'success' | 'emergency' | 'workshop-emergency';
 
 function App() {
   // State to track the current step and form data
@@ -39,6 +41,7 @@ function App() {
   
   // Mock authentication state (replace with real auth later)
   const [isAuthenticated] = useState(false);
+  const [userRole] = useState<'customer' | 'workshop' | null>('workshop'); // Mock workshop owner for demo
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -60,7 +63,11 @@ function App() {
 
   // Handle emergency service request
   const handleEmergencyService = () => {
-    alert('سيتم تطوير خدمة الطوارئ قريباً');
+    if (userRole === 'workshop') {
+      setCurrentStep('workshop-emergency');
+    } else {
+      setCurrentStep('emergency');
+    }
   };
 
   // Handle explore services or register
@@ -200,6 +207,16 @@ function App() {
     setCurrentStep('home');
   };
 
+  // Handle closing emergency page
+  const handleCloseEmergency = () => {
+    setCurrentStep('home');
+  };
+
+  // Handle closing workshop emergency page
+  const handleCloseWorkshopEmergency = () => {
+    setCurrentStep('home');
+  };
+
   // List of cities in Saudi Arabia
   const cities = [
     'الرياض',
@@ -241,6 +258,16 @@ function App() {
     'منطقة عسير',
   ];
 
+  // Show emergency page if current step is emergency
+  if (currentStep === 'emergency') {
+    return <EmergencyPage onClose={handleCloseEmergency} />;
+  }
+
+  // Show workshop emergency page if current step is workshop-emergency
+  if (currentStep === 'workshop-emergency') {
+    return <WorkshopEmergencyPage onClose={handleCloseWorkshopEmergency} />;
+  }
+
   // Render the current step
   const renderStep = () => {
     switch (currentStep) {
@@ -272,7 +299,9 @@ function App() {
                 className="btn-secondary flex items-center justify-center"
               >
                 <AlertTriangle className="ml-2" size={24} />
-                <span>طلب خدمة طوارئ</span>
+                <span>
+                  {userRole === 'workshop' ? 'إدارة طلبات الطوارئ' : 'طلب خدمة طوارئ'}
+                </span>
               </button>
               
               <button
@@ -281,7 +310,7 @@ function App() {
               >
                 {isAuthenticated ? (
                   <>
-                    <Search className="ml-2\" size={24} />
+                    <Search className="ml-2" size={24} />
                     <span>استعرض الخدمات</span>
                   </>
                 ) : (
