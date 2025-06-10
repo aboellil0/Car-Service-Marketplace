@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { UserCircle, Lock, Phone, MapPin, ArrowRight, ArrowLeft, Home, Car, Building2, Link, AlertTriangle, Search } from 'lucide-react';
 import EmergencyPage from './components/EmergencyPage';
 import WorkshopEmergencyPage from './components/WorkshopEmergencyPage';
+import WorkshopListPage from './components/WorkshopListPage';
+import WorkshopOwnerDashboard from './components/WorkshopOwnerDashboard';
 
 // Define types for our form data
 type FormData = {
@@ -18,7 +20,7 @@ type FormData = {
 };
 
 // Define the steps of our registration process
-type Step = 'home' | 'welcome' | 'username' | 'password' | 'phone' | 'city' | 'business-details' | 'success' | 'emergency' | 'workshop-emergency';
+type Step = 'home' | 'welcome' | 'username' | 'password' | 'phone' | 'city' | 'business-details' | 'success' | 'emergency' | 'workshop-emergency' | 'workshop-list' | 'workshop-dashboard';
 
 function App() {
   // State to track the current step and form data
@@ -73,7 +75,11 @@ function App() {
   // Handle explore services or register
   const handleExploreOrRegister = () => {
     if (isAuthenticated) {
-      alert('سيتم تحويلك إلى صفحة الخدمات');
+      if (userRole === 'workshop') {
+        setCurrentStep('workshop-dashboard');
+      } else {
+        setCurrentStep('workshop-list');
+      }
     } else {
       setCurrentStep('welcome');
     }
@@ -217,6 +223,16 @@ function App() {
     setCurrentStep('home');
   };
 
+  // Handle closing workshop list page
+  const handleCloseWorkshopList = () => {
+    setCurrentStep('home');
+  };
+
+  // Handle closing workshop dashboard
+  const handleCloseWorkshopDashboard = () => {
+    setCurrentStep('home');
+  };
+
   // List of cities in Saudi Arabia
   const cities = [
     'الرياض',
@@ -268,6 +284,16 @@ function App() {
     return <WorkshopEmergencyPage onClose={handleCloseWorkshopEmergency} />;
   }
 
+  // Show workshop list page if current step is workshop-list
+  if (currentStep === 'workshop-list') {
+    return <WorkshopListPage onClose={handleCloseWorkshopList} />;
+  }
+
+  // Show workshop dashboard if current step is workshop-dashboard
+  if (currentStep === 'workshop-dashboard') {
+    return <WorkshopOwnerDashboard onClose={handleCloseWorkshopDashboard} />;
+  }
+
   // Render the current step
   const renderStep = () => {
     switch (currentStep) {
@@ -310,8 +336,17 @@ function App() {
               >
                 {isAuthenticated ? (
                   <>
-                    <Search className="ml-2" size={24} />
-                    <span>استعرض الخدمات</span>
+                    {userRole === 'workshop' ? (
+                      <>
+                        <Building2 className="ml-2" size={24} />
+                        <span>لوحة تحكم الورشة</span>
+                      </>
+                    ) : (
+                      <>
+                        <Search className="ml-2" size={24} />
+                        <span>استعرض الخدمات</span>
+                      </>
+                    )}
                   </>
                 ) : (
                   <>
