@@ -224,6 +224,16 @@ function App() {
   };
 
   // Handle closing workshop list page
+  const handleWorkshopList = () => {
+    setCurrentStep('workshop-list');
+  };
+
+  // Handle closing workshop dashboard
+  const handleeWorkshopDashboard = () => {
+    setCurrentStep('workshop-dashboard');
+  };
+
+  // Handle closing workshop list page
   const handleCloseWorkshopList = () => {
     setCurrentStep('home');
   };
@@ -330,6 +340,26 @@ function App() {
                 </span>
               </button>
               
+              <button
+                onClick={handleeWorkshopDashboard}
+                className="btn-secondary flex items-center justify-center"
+              >
+                <AlertTriangle className="ml-2" size={24} />
+                <span>
+                  workshop 
+                </span>
+              </button>
+              
+              <button
+                onClick={handleWorkshopList}
+                className="btn-secondary flex items-center justify-center"
+              >
+                <AlertTriangle className="ml-2" size={24} />
+                <span>
+                  workshop list 
+                </span>
+              </button>
+
               <button
                 onClick={handleExploreOrRegister}
                 className="btn-primary flex items-center justify-center"
