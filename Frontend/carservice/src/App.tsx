@@ -4,6 +4,10 @@ import EmergencyPage from './components/EmergencyPage';
 import WorkshopEmergencyPage from './components/WorkshopEmergencyPage';
 import WorkshopListPage from './components/WorkshopListPage';
 import WorkshopOwnerDashboard from './components/WorkshopOwnerDashboard';
+import LoginPage from './components/auth/LoginPage';
+import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
+import EmailVerificationPage from './components/auth/EmailVerificationPage';
+import TwoFactorAuthPage from './components/auth/TwoFactorAuthPage';
 
 // Define types for our form data
 type FormData = {
@@ -20,7 +24,7 @@ type FormData = {
 };
 
 // Define the steps of our registration process
-type Step = 'home' | 'welcome' | 'username' | 'password' | 'phone' | 'city' | 'business-details' | 'success' | 'emergency' | 'workshop-emergency' | 'workshop-list' | 'workshop-dashboard';
+type Step = 'home' | 'welcome' | 'username' | 'password' | 'phone' | 'city' | 'business-details' | 'success' | 'emergency' | 'workshop-emergency' | 'workshop-list' | 'workshop-dashboard' | 'login' | 'forgot-password' | 'email-verification' | 'two-factor-auth';
 
 function App() {
   // State to track the current step and form data
@@ -41,9 +45,9 @@ function App() {
   // State for form validation errors
   const [errors, setErrors] = useState<Partial<FormData>>({});
   
-  // Mock authentication state (replace with real auth later)
-  const [isAuthenticated] = useState(false);
-  const [userRole] = useState<'customer' | 'workshop' | null>('workshop'); // Mock workshop owner for demo
+  // Mock authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState<'customer' | 'workshop' | null>(null);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -81,7 +85,7 @@ function App() {
         setCurrentStep('workshop-list');
       }
     } else {
-      setCurrentStep('welcome');
+      setCurrentStep('login');
     }
   };
 
@@ -89,6 +93,34 @@ function App() {
   const handleUserTypeSelect = (type: 'customer' | 'workshop') => {
     setFormData({ ...formData, userType: type });
     setCurrentStep('username');
+  };
+
+  // Handle login success
+  const handleLoginSuccess = (userType: 'customer' | 'workshop') => {
+    setIsAuthenticated(true);
+    setUserRole(userType);
+    setCurrentStep('email-verification');
+  };
+
+  // Handle email verification success
+  const handleEmailVerificationSuccess = () => {
+    setCurrentStep('two-factor-auth');
+  };
+
+  // Handle two-factor auth setup complete
+  const handleTwoFactorAuthComplete = () => {
+    if (userRole === 'workshop') {
+      setCurrentStep('workshop-dashboard');
+    } else {
+      setCurrentStep('workshop-list');
+    }
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserRole(null);
+    setCurrentStep('home');
   };
 
   // Validate the current step
@@ -224,16 +256,6 @@ function App() {
   };
 
   // Handle closing workshop list page
-  const handleWorkshopList = () => {
-    setCurrentStep('workshop-list');
-  };
-
-  // Handle closing workshop dashboard
-  const handleeWorkshopDashboard = () => {
-    setCurrentStep('workshop-dashboard');
-  };
-
-  // Handle closing workshop list page
   const handleCloseWorkshopList = () => {
     setCurrentStep('home');
   };
@@ -283,6 +305,47 @@ function App() {
     'منطقة الجوف',
     'منطقة عسير',
   ];
+
+  // Show authentication pages
+  if (currentStep === 'login') {
+    return (
+      <LoginPage
+        onClose={() => setCurrentStep('home')}
+        onForgotPassword={() => setCurrentStep('forgot-password')}
+        onRegister={() => setCurrentStep('welcome')}
+        onLoginSuccess={handleLoginSuccess}
+      />
+    );
+  }
+
+  if (currentStep === 'forgot-password') {
+    return (
+      <ForgotPasswordPage
+        onClose={() => setCurrentStep('home')}
+        onBackToLogin={() => setCurrentStep('login')}
+      />
+    );
+  }
+
+  if (currentStep === 'email-verification') {
+    return (
+      <EmailVerificationPage
+        onClose={() => setCurrentStep('home')}
+        onVerificationSuccess={handleEmailVerificationSuccess}
+        userEmail="user@example.com"
+      />
+    );
+  }
+
+  if (currentStep === 'two-factor-auth') {
+    return (
+      <TwoFactorAuthPage
+        onClose={() => setCurrentStep('home')}
+        onSetupComplete={handleTwoFactorAuthComplete}
+        onSkip={handleTwoFactorAuthComplete}
+      />
+    );
+  }
 
   // Show emergency page if current step is emergency
   if (currentStep === 'emergency') {
@@ -341,26 +404,6 @@ function App() {
               </button>
               
               <button
-                onClick={handleeWorkshopDashboard}
-                className="btn-secondary flex items-center justify-center"
-              >
-                <AlertTriangle className="ml-2" size={24} />
-                <span>
-                  workshop 
-                </span>
-              </button>
-              
-              <button
-                onClick={handleWorkshopList}
-                className="btn-secondary flex items-center justify-center"
-              >
-                <AlertTriangle className="ml-2" size={24} />
-                <span>
-                  workshop list 
-                </span>
-              </button>
-
-              <button
                 onClick={handleExploreOrRegister}
                 className="btn-primary flex items-center justify-center"
               >
@@ -381,10 +424,20 @@ function App() {
                 ) : (
                   <>
                     <UserCircle className="ml-2" size={24} />
-                    <span>سجل الآن</span>
+                    <span>تسجيل الدخول</span>
                   </>
                 )}
               </button>
+
+              {isAuthenticated && (
+                <button
+                  onClick={handleLogout}
+                  className="btn-outline flex items-center justify-center"
+                >
+                  <ArrowLeft className="ml-2" size={20} />
+                  <span>تسجيل الخروج</span>
+                </button>
+              )}
             </div>
           </div>
         );
