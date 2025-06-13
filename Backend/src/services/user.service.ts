@@ -2,13 +2,18 @@ import User,{ IUser } from '../models/User.model';
 import Cars,{ICars} from '../models/Cars.model';
 import CarInfo,{ICarInfo} from '../models/CarInfo.model';
 import mongoose from 'mongoose';
+import { resolve } from 'path';
 
-interface FullAddress {
-    location: {
+interface location {
         address: string;
         state: string;
         city: string;
-    };
+}
+
+interface completeProfile{
+    location: location;
+    car: ICars;
+    carInfo: ICarInfo;
 }
 
 interface ApiResponse<T> {
@@ -20,12 +25,12 @@ interface ApiResponse<T> {
 
 interface IUserService {
     updateUser(userId: string, userData: Partial<IUser>): Promise<ApiResponse<IUser>>;
-    deleteUser(user: IUser): Promise<ApiResponse<IUser>>;
-    addPhoto(user: IUser, image: string): Promise<ApiResponse<IUser>>;
-    addFullAddress(user: IUser, fullAddress: FullAddress): Promise<ApiResponse<IUser>>;
-    addCar(user: IUser, car: ICars): Promise<ApiResponse<IUser>>;
-    addCarInfo(user: IUser, carInfo: ICarInfo): Promise<ApiResponse<IUser>>;
-    completeProfile(user: IUser): Promise<ApiResponse<IUser>>;
+    deleteUser(userId: string): Promise<ApiResponse<IUser>>;
+    addPhoto(userId: string, image: string): Promise<ApiResponse<IUser>>;
+    addFullAddress(userId: string, fullAddress: location): Promise<ApiResponse<IUser>>;
+    addCar(userId: string, car: ICars): Promise<ApiResponse<IUser>>;
+    addCarInfo(userId: string, carInfo: ICarInfo): Promise<ApiResponse<IUser>>;
+    completeProfile(userId: string, compProfile: completeProfile): Promise<ApiResponse<IUser>>;
 }
 
 
@@ -33,22 +38,22 @@ class UserService implements IUserService {
     async updateUser(userId: string, userData: Partial<IUser>): Promise<ApiResponse<IUser>> {
         return new Promise(async (resolve, reject) => {
             try {
-                const existingUser = await User.findById(userId);
-                if (existingUser) {
-                    existingUser.name = userData.name || existingUser.name;
-                    existingUser.phone = userData.phone || existingUser.phone;
-                    existingUser.location = userData.location || existingUser.location;
-                    existingUser.image = userData.image || existingUser.image;
-                    existingUser.carId = userData.carId || existingUser.carId;
-                    existingUser.carInfoId = userData.carInfoId || existingUser.carInfoId;
-                    await existingUser.save();
+                if (!userId){
+                    reject({
+                        success:false,
+                        message:'user id is required',
+                        data:null
+                    });
+                }
+
+                const updatedUser = await User.findByIdAndUpdate(userId,userData,{new:true});
+                if (updatedUser) {
                     resolve({
                         success: true,
                         message: 'User updated successfully',
-                        data: existingUser
+                        data: updatedUser
                     });
-                }
-                else {
+                } else {
                     return reject({
                         success: false,
                         message: 'User not found',
@@ -65,10 +70,9 @@ class UserService implements IUserService {
             }
         });
     }
-    async deleteUser(user: IUser): Promise<ApiResponse<IUser>> {
+    async deleteUser(userId: string): Promise<ApiResponse<IUser>> {
         return new Promise(async (resolve, reject) => {
             try {
-                const userId = user._id;
                 if (!userId) {
                     return reject({
                         success: false,
@@ -100,10 +104,9 @@ class UserService implements IUserService {
             }
         });
     }
-    async addPhoto(user: IUser, image: string): Promise<ApiResponse<IUser>> {
+    async addPhoto(userId: string, image: string): Promise<ApiResponse<IUser>> {
         return new Promise(async (resolve, reject) => {
             try {
-                const userId = user._id;
                 if (!userId) {
                     return reject({
                         success: false,
@@ -136,16 +139,150 @@ class UserService implements IUserService {
         }
         );
     }
-    async addFullAddress(user: IUser, fullAddress: FullAddress): Promise<ApiResponse<IUser>> {
-        
+    async addFullAddress(userId: string, fullAddress: location): Promise<ApiResponse<IUser>> {
+        return new Promise(async (resolve,reject)=>{
+            try{
+                if(!userId){
+                    reject({
+                        success: false,
+                        message:'user id is required',
+                        data:null
+                    });
+
+                    const kk = 55;
+                    const updatedUser = await User.findByIdAndUpdate(userId,{location},{new:true});
+                    if (updatedUser) {
+                        resolve({
+                            success: true,
+                            message: 'User updatedUser successfully',
+                            data: updatedUser
+                        });
+                    } else {
+                        return reject({
+                            success: false,
+                            message: 'User not found',
+                            data: null
+                        });
+                    }
+                }
+            } catch (err) {
+                reject({
+                    success: false,
+                    message: 'Error adding photo',
+                    data: null,
+                    error: err instanceof Error ? err.message : 'Unknown error'
+                });
+            }
+        });
     }
-    async addCar(user: IUser, car: ICars): Promise<ApiResponse<IUser>> {
-        
+    async addCar(userId: string, car: ICars): Promise<ApiResponse<IUser>> {
+        return new Promise(async (resolve,reject)=>{
+            try{
+                if(!userId){
+                    reject({
+                        success: false,
+                        message:'user id is required',
+                        data:null
+                    });
+
+                    const updatedUser = await User.findByIdAndUpdate(userId, { car }, { new: true });
+                    if (updatedUser) {
+                        resolve({
+                            success: true,
+                            message: 'Car added successfully',
+                            data: updatedUser
+                        });
+                    } else {
+                        return reject({
+                            success: false,
+                            message: 'User not found',
+                            data: null
+                        });
+                    }
+                }
+            } catch (err) {
+                reject({
+                    success: false,
+                    message: 'Error adding photo',
+                    data: null,
+                    error: err instanceof Error ? err.message : 'Unknown error'
+                });
+            }
+        });
     }
-    async addCarInfo(user: IUser, carInfo: ICarInfo): Promise<ApiResponse<IUser>> {
-        
+    async addCarInfo(userId: string, carInfo: ICarInfo): Promise<ApiResponse<IUser>> {
+        return new Promise(async (resolve,reject)=>{
+            try{
+                if(!userId){
+                    reject({
+                        success: false,
+                        message:'user id is required',
+                        data:null
+                    });
+                }
+
+                const newCarInfo = new CarInfo(carInfo);
+                const savedCarInfo = await newCarInfo.save();
+                const updatedUser = await User.findByIdAndUpdate(userId, { carInfo: savedCarInfo._id }, { new: true });
+                if (updatedUser) {
+                    resolve({
+                        success: true,
+                        message: 'Car info added successfully',
+                        data: updatedUser
+                    });
+                } else {
+                    return reject({
+                        success: false,
+                        message: 'User not found',
+                        data: null
+                    });
+                }
+
+            } catch (err) {
+                reject({
+                    success: false,
+                    message: 'Error adding photo',
+                    data: null,
+                    error: err instanceof Error ? err.message : 'Unknown error'
+                });
+            }
+        });
     }
-    async completeProfile(user: IUser): Promise<ApiResponse<IUser>> {
-        
+    async completeProfile(userId: string,compProfile: completeProfile): Promise<ApiResponse<IUser>> {
+        return new Promise(async (resolve,reject)=>{
+            try{
+                if(!userId){
+                    reject({
+                        success: false,
+                        message:'user id is required',
+                        data:null
+                    });
+                }
+                const { location, car, carInfo } = compProfile;
+                const newcarInfo = new CarInfo(carInfo);
+                const savedCarInfo = await newcarInfo.save();
+                const updatedUser = await User.findByIdAndUpdate(userId,{ location, car, carInfo: savedCarInfo._id },{ new: true });
+                if (updatedUser) {
+                    resolve({
+                        success: true,
+                        message: 'Profile completed successfully',
+                        data: updatedUser
+                    });
+                } else {
+                    reject({
+                        success: false,
+                        message: 'User not found',
+                        data: null
+                    });
+                }
+            } catch (err) {
+                reject({
+                    success: false,
+                    message: 'Error adding photo',
+                    data: null,
+                    error: err instanceof Error ? err.message : 'Unknown error'
+                });
+            }
+        });
     }
 }

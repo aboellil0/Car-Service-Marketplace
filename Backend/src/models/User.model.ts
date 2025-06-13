@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 
 export interface IUser {
     _id: mongoose.Types.ObjectId;
-    carId?: mongoose.Types.ObjectId;
     carInfoId?: mongoose.Types.ObjectId;
     username: string;
     email?: string;
@@ -17,6 +16,12 @@ export interface IUser {
         address?: string;
         city: string;
         state?: string;
+    };
+    car?:{
+        brand: string;
+        brandEnglish: string;
+        models: string[];
+        year: number;
     };
     avatar?: string;
     image?: string;
@@ -38,7 +43,6 @@ export interface IUser {
 
 
 const UserSchema = new mongoose.Schema<IUser>({
-    carId: { type: mongoose.Types.ObjectId, ref: "Cars" },
     carInfoId: { type: mongoose.Types.ObjectId, ref: "CarInfo" },
     username: { type: String, required: true, unique: true },
     email: { type: String, unique: true, default: "" },
@@ -52,6 +56,12 @@ const UserSchema = new mongoose.Schema<IUser>({
         city: { type: String },  // Made optional for Google auth
         state: { type: String, default: "" }
     },
+    car: {
+        brand: { type: String, default: "" },
+        brandEnglish: { type: String, default: "" },
+        models: { type: [String], default: [] },
+        year: { type: Number, default: 0 }
+    },
     avatar: { type: String, default: "" },
     googleId: { type: String, unique: true, sparse: true },  // Added for Google auth
     image: { type: String, default: "" },
@@ -60,10 +70,8 @@ const UserSchema = new mongoose.Schema<IUser>({
     hasCarInfo: { type: Boolean, default: false },
     hasFullAddress: { type: Boolean, default: false },
     isCompleted: { 
-        type: Boolean, 
-        default: function(this: IUser) {
-            return this.hasCar && this.hasCarInfo && this.hasFullAddress;
-        }
+        type: Boolean, default: false,
+        required: true
     },
     emailVerificationToken: { type: String, default: "" },
     emailVerificationExpires: { type: Date, default: null },
