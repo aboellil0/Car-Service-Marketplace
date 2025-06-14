@@ -9,10 +9,16 @@ interface location {
         state: string;
         city: string;
 }
+interface CarModel {
+    brand: string;
+    brandEnglish: string;
+    models: string;
+    year: number;
+}
 
-interface completeProfile{
+interface completeProfile {
     location: location;
-    car: ICars;
+    car: CarModel;
     carInfo: ICarInfo;
 }
 
@@ -28,7 +34,7 @@ interface IUserService {
     deleteUser(userId: string): Promise<ApiResponse<IUser>>;
     addPhoto(userId: string, image: string): Promise<ApiResponse<IUser>>;
     addFullAddress(userId: string, fullAddress: location): Promise<ApiResponse<IUser>>;
-    addCar(userId: string, car: ICars): Promise<ApiResponse<IUser>>;
+    addCar(userId: string, car: CarModel): Promise<ApiResponse<IUser>>;
     addCarInfo(userId: string, carInfo: ICarInfo): Promise<ApiResponse<IUser>>;
     completeProfile(userId: string, compProfile: completeProfile): Promise<ApiResponse<IUser>>;
 }
@@ -175,7 +181,7 @@ class UserService implements IUserService {
             }
         });
     }
-    async addCar(userId: string, car: ICars): Promise<ApiResponse<IUser>> {
+    async addCar(userId: string, car: CarModel): Promise<ApiResponse<IUser>> {
         return new Promise(async (resolve,reject)=>{
             try{
                 if(!userId){

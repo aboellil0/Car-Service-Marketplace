@@ -8,6 +8,7 @@ import { resolve } from "path";
 import { rejects } from "assert";
 import { error } from "console";
 import { getGoogleUser } from "../config/google.config";
+import WorkshopService,{IWorkshopService} from "./workshop.service";
 
 interface GoogleProfile{
     id: string;
@@ -122,12 +123,27 @@ class AuthService implements IAuthService{
                 });
 
                 await newUser.save();
+
+                const workshop = {
+                    owner: newUser._id,
+                    businessName,
+                    location: {                
+                        address: userData.location.address,
+                        city: userData.location.city,
+                        state: userData.location.state,
+                        mapLink: userData.location.mapLink
+                    }
+                };
+                
+                const workshopService = new WorkshopService();
+                await workshopService.createWorkshop(workshop, newUser._id.toString());
+                
                 const accessToken = generateAccessToken(newUser);
                 const refreshToken = generateRefreshToken(newUser);
                 
                 resolve({
                     success: true,
-                    message: "workshop_owner",
+                    message: "Workshop owner registered successfully",
                     accessToken,
                     refreshToken
                 });
