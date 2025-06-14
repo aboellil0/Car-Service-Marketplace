@@ -20,7 +20,7 @@ export interface IUser {
     car?:{
         brand: string;
         brandEnglish: string;
-        models: string[];
+        models: string;
         year: number;
     };
     avatar?: string;
@@ -59,7 +59,7 @@ const UserSchema = new mongoose.Schema<IUser>({
     car: {
         brand: { type: String, default: "" },
         brandEnglish: { type: String, default: "" },
-        models: { type: [String], default: [] },
+        models: { type: String, default: "" },
         year: { type: Number, default: 0 }
     },
     avatar: { type: String, default: "" },
