@@ -136,7 +136,10 @@ class AuthService implements IAuthService{
                 };
                 
                 const workshopService = new WorkshopService();
-                await workshopService.createWorkshop(workshop, newUser._id.toString());
+                const newWorkshop= await workshopService.createWorkshop(workshop, newUser._id.toString());
+                if (!newWorkshop.success) {
+                    return reject({ success: false, message: "Failed to create workshop" });
+                }
                 
                 const accessToken = generateAccessToken(newUser);
                 const refreshToken = generateRefreshToken(newUser);
